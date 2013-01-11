@@ -1,0 +1,31 @@
+<project name="HelloWorld" default="compile" basedir=".">
+	<description>
+        simple example build file
+    </description>
+	<target name="clean">
+		<!-- clean -->
+		<delete dir="build"/>
+	</target>
+
+	<target name="compile">
+		<!-- compile -->
+		<mkdir dir="build/classes"/>
+		<javac srcdir="src" destdir="build/classes" includeAntRuntime="true" />
+	</target>
+	
+	<target name="jar">
+		<!-- jar -->
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/HelloWorld.jar" bassedir="build/classes">
+			<manifest>
+				<attribute name="Main-Class" value="oata.HelloWorld"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="run">
+		<!-- run -->
+		<java jar="build/jar/HelloWorld.jar" fork="true"/>
+	</target>
+	
+</project>
