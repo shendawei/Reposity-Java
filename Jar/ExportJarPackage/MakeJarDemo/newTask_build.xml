@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"/>
+<project name="CustomTask" default="newTask" basedir=".">
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="bin"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/jar"/>
+	
+	<property name="MyTask" value="com.shendw.jar.MyTask"/>
+	
+	<target name="newTask" description="perform a new task" depends="clean,jar">
+		<!-- newTask -->
+		<!-- :def task -->
+		<taskdef name="mytask" classname="${MyTask}" classpath="${jar.dir}/${ant.project.name}.jar"/>
+		<!-- :call task -->
+		<mytask/>
+	</target>
+</project>

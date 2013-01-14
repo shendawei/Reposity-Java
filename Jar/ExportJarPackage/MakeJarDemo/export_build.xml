@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="makejardemo" default="newTask" basedir=".">
+
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="bin"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/jar"/>
+	
+	<property name="main-class" value="com.shendw.jar.HelloWorld"/>
+	<property name="MyTask" value="com.shendw.jar.MyTask"/>
+	
+	<target name="clean">
+		<!-- clean -->
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<target name="init">
+		<!-- init -->
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+	</target>
+	
+	<target name="compile" depends="init">
+		<!-- compile -->
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="true"/>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<!-- jar -->
+		<!-- common classes jar -->
+		<!-- <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/> -->
+		
+		<!-- exec classes jar -->
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-class" value="${main-class}"/>
+			</manifest>	
+		</jar>
+	</target>
+	
+	<target name="run" depends="jar">
+		<!-- run -->
+		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+	</target>
+	
+	<target name="makejar" depends="clean,run">
+		<!-- makejar -->
+		<!-- <java jar="${jar.dir}/${ant.project.name}.jar"/> -->
+	</target>
+	
+	<target name="newTask" description="perform a new task" depends="clean,jar">
+		<!-- newTask -->
+		<!-- :def task -->
+		<taskdef name="mytask" classname="${MyTask}" classpath="${jar.dir}/${ant.project.name}.jar"/>
+		<!-- :call task -->
+		<mytask/>
+	</target>
+</project>
