@@ -1,33 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="makejardemo" default="newTask" basedir=".">
-
+	
+	<!-- dir property -->
 	<property name="src.dir" value="src"/>
 	<property name="build.dir" value="bin"/>
 	<property name="classes.dir" value="${build.dir}/classes"/>
 	<property name="jar.dir" value="${build.dir}/jar"/>
+	<property name="log.dir" value="${build.dir}/log"/>
+	
+	<!-- log property -->
+	<property name="init_log.name" value="init_log.txt"/>
+	<property name="clean_log.name" value="clean_log.txt"/>
+	<property name="compile_log.name" value="compile_log.txt"/>
+	<property name="jar_log.name" value="jar_log.txt"/>
+	<property name="run_log.name" value="run_log.txt"/>
+	<property name="newTask_log.name" value="newTask.txt"/>
+	<property name="project_log.name" value="project_log.txt"/>
+	<property name="env_log.name" value="env.txt"/>
+	
+	<property name="echo_log.name" value="echo.txt"/>
+	
 	
 	<property name="main-class" value="com.shendw.jar.HelloWorld"/>
 	<property name="MyTask" value="com.shendw.jar.MyTask"/>
 	
+	<!-- <record></record>只能用在<target></target>之间 -->
+	<!-- <record name="${log.dir}/${project_log.name}" action="start"/>
+	<record name="${log.dir}/${env_log.name}" action="start"/>
+	<record name="${log.dir}/${env_log.name}" action="stop"/> -->
+	
+	<!-- action -->
 	<target name="clean">
 		<!-- clean -->
+		<delete file="${clean_log.name}"/>
+		<delete file="${init_log.name}"/>
+		
+		<record name="${clean_log.name}" action="start"/>
 		<delete dir="${build.dir}"/>
+		<record name="${clean_log.name}" action="stop"/>
 	</target>
 	
 	<target name="init">
 		<!-- init -->
+		<record name="${init_log.name}" action="start"/>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 		<mkdir dir="${jar.dir}"/>
+		<mkdir dir="${log.dir}"/>
+		<echo message=""/>
+		<echo message="The java environment is : ${java.class.path}"/>
+		<echo message=""/>
+		<record name="${init_log.name}" action="stop"/>
 	</target>
 	
 	<target name="compile" depends="init">
 		<!-- compile -->
+		<record name="${log.dir}/${compile_log.name}" action="start"/>
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="true"/>
+		<record name="${log.dir}/${compile_log.name}" action="stop"/>
 	</target>
 	
 	<target name="jar" depends="compile">
 		<!-- jar -->
+		<record name="${log.dir}/${jar_log.name}" action="start"/>
 		<!-- common classes jar -->
 		<!-- <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/> -->
 		
@@ -37,11 +72,14 @@
 				<attribute name="Main-class" value="${main-class}"/>
 			</manifest>	
 		</jar>
+		<record name="${log.dir}/${jar_log.name}" action="stop"/>
 	</target>
 	
 	<target name="run" depends="jar">
 		<!-- run -->
+		<record name="${log.dir}/${run_log.name}" action="start"/>
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+		<record name="${log.dir}/${run_log.name}" action="stop"/>
 	</target>
 	
 	<target name="makejar" depends="clean,run">
@@ -51,9 +89,32 @@
 	
 	<target name="newTask" description="perform a new task" depends="clean,jar">
 		<!-- newTask -->
+		<record name="${log.dir}/${newTask_log.name}" action="start"/>
 		<!-- :def task -->
-		<taskdef name="mytask" classname="${MyTask}" classpath="${jar.dir}/${ant.project.name}.jar"/>
+		<!-- <taskdef name="mytask" classname="${MyTask}" classpath="${jar.dir}/${ant.project.name}.jar"/> -->
 		<!-- :call task -->
-		<mytask/>
+		<!-- <mytask/> -->
+		<!-- 无法连接至163 host -->
+		<!-- <mail mailhost="smtp.163.com" mailport="25" subject="Test build"> -->
+		<mail mailhost="smtp.163.com" mailport="25" tolist="" subject="Test build" user="shendawei0727" password="wei@juan#2517">
+		<!-- 内部邮箱可以通过 -->
+		<!-- <mail mailhost="lzt-server01.kigyo" mailport="25" subject="Test build"> -->
+			<from address="shendawei0727@163.com"/>
+			<!-- <from address="989-shendawei@lzt-server01.kigyo"/> -->
+			<!-- <password="wei@juan#2517"/> -->
+			<replyto address="shendawei2009@gmail.com"/>
+			<!-- <replyto address="989-shendawei@lzt-server01.kigyo"/> -->
+			<to address="shendawei2009@gmail.com"/>
+			<to address="989-shendawei@lzt-server01.kigyo"/>
+			<message>The java files nightly build has completed</message>
+			<attachments>
+				<fileset dir="${jar.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</attachments>
+		</mail>
+		<record name="${log.dir}/${newTask_log.name}" action="stop"/>
 	</target>
+	
+	<!-- <record name="${log.dir}/${project_log.name}" action="stop"/> -->
 </project>
