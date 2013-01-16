@@ -96,15 +96,17 @@
 		<!-- <mytask/> -->
 		<!-- 无法连接至163 host -->
 		<!-- <mail mailhost="smtp.163.com" mailport="25" subject="Test build"> -->
-		<mail mailhost="smtp.163.com" mailport="25" tolist="" subject="Test build" user="shendawei0727" password="wei@juan#2517">
+		<!-- <mail mailhost="smtp.163.com" mailport="25" tolist="" subject="Test build" user="shendawei0727" password="wei@juan#2517"> -->
 		<!-- 内部邮箱可以通过 -->
-		<!-- <mail mailhost="lzt-server01.kigyo" mailport="25" subject="Test build"> -->
-			<from address="shendawei0727@163.com"/>
-			<!-- <from address="989-shendawei@lzt-server01.kigyo"/> -->
+		<mail mailhost="lzt-server01.kigyo" mailport="25" subject="Test build">
+			<!-- <from address="shendawei0727@163.com"/> -->
+			<from address="989-shendawei@lzt-server01.kigyo"/>
 			<!-- <password="wei@juan#2517"/> -->
-			<replyto address="shendawei2009@gmail.com"/>
-			<!-- <replyto address="989-shendawei@lzt-server01.kigyo"/> -->
-			<to address="shendawei2009@gmail.com"/>
+			<!-- <replyto address="shendawei2009@gmail.com"/> -->
+			<!-- <replyto address="shendawei2007@163.com"/> -->
+			<replyto address="989-shendawei@lzt-server01.kigyo"/>
+			<!-- <to address="shendawei2009@gmail.com"/> -->
+			<!-- <to address="shendawei2007@163.com"/> -->
 			<to address="989-shendawei@lzt-server01.kigyo"/>
 			<message>The java files nightly build has completed</message>
 			<attachments>
